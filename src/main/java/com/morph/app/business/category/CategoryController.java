@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RestController
 @RequestMapping("category")
 public class CategoryController {
+
   @Autowired
   private CategoryService categoryService;
 
@@ -57,7 +58,6 @@ public class CategoryController {
   }
 
   @PostMapping(consumes = { "multipart/form-data" })
-
   public ResponseEntity<ResponseInsert> store(@Valid @ModelAttribute RequestInsert soInsert,
       BindingResult bindingResult) {
     ResponseInsert responseInsert = new ResponseInsert();
@@ -68,11 +68,11 @@ public class CategoryController {
       DtoCategory dtoCategory = ConvertDtoCategory.convertDtoCategory(soInsert);
       categoryService.insert(dtoCategory);
       responseInsert.success();
-      responseInsert.addResponseMesssage("Operacion realizada exitosamente");
+      responseInsert.addResponseMesssage("Operación realizada exitosamente");
       return new ResponseEntity<>(responseInsert, HttpStatus.CREATED);
     } catch (Exception e) {
       responseInsert.exception();
-      responseInsert.addResponseMesssage("Ocurrio un error inesperado: " + e.getMessage());
+      responseInsert.addResponseMesssage("Ocurrió un error inesperado: " + e.getMessage());
       return new ResponseEntity<>(responseInsert, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -88,7 +88,7 @@ public class CategoryController {
         return new ResponseEntity<>(responseDelete, HttpStatus.OK);
       } else {
         responseDelete.error();
-        responseDelete.addResponseMesssage("No se encontro el registro a eliminar");
+        responseDelete.addResponseMesssage("No se encontró el registro a eliminar");
         return new ResponseEntity<>(responseDelete, HttpStatus.NOT_FOUND);
       }
     } catch (Exception e) {
@@ -106,10 +106,17 @@ public class CategoryController {
     dtoCategory.setName(soUpdate.getName());
     dtoCategory.setDescription(soUpdate.getDescription());
     try {
-      categoryService.update(dtoCategory);
-      responseUpdate.success();
-      responseUpdate.addResponseMesssage("Operacion realizada correctamente");
-      return ResponseEntity.ok(responseUpdate);
+      boolean isUpdated = categoryService.update(dtoCategory);
+      if (isUpdated) {
+        responseUpdate.success();
+        responseUpdate.addResponseMesssage("Operacion realizada correctamente.");
+        return ResponseEntity.ok(responseUpdate);
+      } else {
+        responseUpdate.error();
+        responseUpdate.addResponseMesssage("No se encontró la categoría o no se pudo actualizar");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseUpdate);
+      }
+
     } catch (Exception e) {
       responseUpdate.exception();
       responseUpdate.addResponseMesssage("Ocurrió un error inesperado, estamos trabajando para solucionarlo.");

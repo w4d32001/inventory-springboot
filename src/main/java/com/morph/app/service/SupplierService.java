@@ -47,7 +47,6 @@ public class SupplierService {
       tSupplier.setName(dtoSupplier.getName());
       tSupplier.setContact(dtoSupplier.getContact());
       tSupplier.setPhone(dtoSupplier.getPhone());
-      tSupplier.setEmail(dtoSupplier.getEmail());
       supplierRepository.save(tSupplier);
       return true;
     }).orElse(false);

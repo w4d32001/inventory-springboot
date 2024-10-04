@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class RequestUpdate {
   @NotBlank(message = "El campo \"categoryId\" no debe estar vacío.")
-  @Length(max = 32, message = "El campo \"categoryId\" no debe tener más de 32 caracteres.")
+  @Length(max = 36, message = "El campo \"categoryId\" no debe tener más de 36 caracteres.")
   private String categoryId;
   @Length(max = 50, message = "El campo \"name\" no debe tener más de 50 caracteres.")
   private String name;

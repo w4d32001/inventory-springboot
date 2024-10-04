@@ -29,13 +29,13 @@ public class CategoryService {
     dtoCategory.setCreatedAt(new Date());
     dtoCategory.setUpdatedAt(new Date());
     TCategory tCategory = new TCategory(dtoCategory);
-    categoryRepository.save(tCategory);
+    this.categoryRepository.save(tCategory);
     return true;
   }
 
   public boolean delete(String categoryId){
-    if(categoryRepository.existsById(categoryId)){
-      categoryRepository.deleteById(categoryId);
+    if(this.categoryRepository.existsById(categoryId)){
+      this.categoryRepository.deleteById(categoryId);
       return true;
     }else{
       return false;
@@ -43,11 +43,20 @@ public class CategoryService {
   }
   
   public boolean update(DtoCategory dtoCategory){
+    if(!this.categoryRepository.existsById(dtoCategory.getCategoryId())){
+      return false;
+    }
+
+    TCategory category = this.categoryRepository.findById(dtoCategory.getCategoryId()).orElse(null);
+    if (category == null) {
+      return false;
+    }
+
     dtoCategory.setUpdatedAt(new Date());
-    return categoryRepository.findById(dtoCategory.getCategoryId()).map(tCategory -> {
+    return this.categoryRepository.findById(dtoCategory.getCategoryId()).map(tCategory -> {
     tCategory.setName(dtoCategory.getName());
     tCategory.setDescription(dtoCategory.getDescription());
-    categoryRepository.save(tCategory);
+    this.categoryRepository.save(tCategory);
     return true;
     }).orElse(false);
   }
