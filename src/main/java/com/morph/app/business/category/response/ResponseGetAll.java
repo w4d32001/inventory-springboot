@@ -1,0 +1,18 @@
+package com.morph.app.business.category.response;
+
+import java.util.ArrayList;
+import java.util.List;
+import com.morph.app.business.ResponseGeneral;
+
+public class ResponseGetAll extends ResponseGeneral {
+  public class Dto {
+    public List<Object> listCategory;
+  }
+
+  public Dto dto;
+
+  public ResponseGetAll() {
+    dto = new Dto();
+    dto.listCategory = new ArrayList<>();
+  }
+}
